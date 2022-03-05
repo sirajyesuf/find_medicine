@@ -20,6 +20,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Request::class);
     }
-
-    
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
 }

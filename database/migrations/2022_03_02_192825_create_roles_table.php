@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('long_name');
-            $table->short('short_name');
+            $table->string('short_name');
             $table->timestamps();
         });
     }

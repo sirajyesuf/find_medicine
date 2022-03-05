@@ -20,7 +20,7 @@ class RoleFactory extends Factory
     {
         $role1 = [
             'long_name' => 'pharmacy_owner',
-            'short_name' => 'pharma'
+            'short_name' => 'pharmacy_owner'
         ];
         $role2 = [
             'long_name' => 'customer',
