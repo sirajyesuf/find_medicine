@@ -4,24 +4,24 @@
     >
         <div class="max-w-md w-full space-y-8">
             <Logo title="Sign up to get account" />
-            <form class="mt-8 space-y-6">
+            <form class="mt-8 space-y-6" @submit.prevent="register">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
-                        <Error :error="credential.error[0]" />
+                        <Error error="" />
                         <BaseInput
                             type="tel"
                             placeholder="Phone Number"
-                            v-model="credential.phonenumber"
-                            @input="validatePhoneNumber"
+                            v-model="form.phonenumber"
                         />
                     </div>
 
                     <div>
-                        <Error error="erroryyyyyyyyyyyyyyyyyyyyyy" />
+                        <Error error="" />
                         <BaseInput
-                            v-model="credential.password"
+                            v-model="form.password"
                             type="password"
                             placeholder="password"
+                            @change="validatePassword"
                         />
                     </div>
                 </div>
@@ -47,29 +47,23 @@ import BaseInput from "../../components/form/BaseInput.vue";
 import BaseButton from "../../components/form/BaseButton.vue";
 import BaseLink from "../../components/form/BaseLink.vue";
 import Error from "../../components/form/Error.vue";
+import Form from "../../form.js";
+import authservice from "../../services/authservice.js";
 
 export default {
     data() {
         return {
-            credential: {
-                password: null,
+            form: new Form({
                 phonenumber: null,
-                error: [],
-            },
+                password: null,
+            }),
         };
     },
     watch: {},
     methods: {
-        register() {},
-        validatePhoneNumber() {
-            if (this.credential.phonenumber.length > 12) {
-                this.credential.error.push(
-                    "the length of the phonenumber must be lessthan 12"
-                );
-            }
-            if (this.credential.phonenumber.length < 12) {
-                this.credential.error.pop();
-            }
+        register() {
+            authservice.register(this.form.data);
+            // this.form.submit("post", "/projects");
         },
     },
     components: {

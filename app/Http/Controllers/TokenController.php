@@ -14,7 +14,6 @@ class TokenController extends Controller
         $request->validate([
             'phonenumber' => 'required',
             'password' => 'required',
-            'device_name' => 'required',
         ]);
 
         $user = User::where('phonenumber', $request->phonenumber)->first();
