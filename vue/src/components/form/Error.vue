@@ -1,5 +1,5 @@
 <template>
-    <span class="text-red-900 text-lg font-bold">
+    <span class="text-red-900 text-sm font-normal">
         {{ error }}
     </span>
 </template>

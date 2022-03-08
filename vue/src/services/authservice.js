@@ -2,10 +2,13 @@ import client from "../axios.js";
 
 async function register(payload) {
     await get_csrf_cookie();
-    return client.post("/account/register",payload);
+    return client.post("/account/register", payload);
 }
 async function login(payload) {
     return client.post(payload);
+}
+function logout() {
+    return client.post("account/logout");
 }
 function getAuthUser() {
     return client.get("/users/auth");
@@ -18,4 +21,5 @@ export default {
     register,
     login,
     getAuthUser,
+    logout,
 };

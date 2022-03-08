@@ -28,8 +28,6 @@ class Errors {
 
             return;
         }
-
-        this.errors = {};
     }
 }
 
@@ -59,39 +57,23 @@ class Form {
         }
     }
 
-    submit(requestType, url) {
-        axios[requestType](url, this.data())
-            .then(this.onSuccess.bind(this))
-            .catch(this.onFail.bind(this));
+    async submit() {
+        return authservice
+            .register(this.data())
+            .then(await this.onSuccess.bind(this))
+            .catch(await this.onFail.bind(this));
     }
 
-    onSuccess(response) {
-        alert(response.data.message);
-
+    async onSuccess(response) {
         this.errors.clear();
         this.reset();
+        return Promise.resolve(response);
     }
 
-    onFail(error) {
-        this.errors.record(error.response.data);
+    async onFail(error) {
+        this.errors.record(error.response.data.errors);
+        return Promise.reject(error);
     }
 }
 
 export default Form;
-
-// new Vue({
-//     el: "#app",
-
-//     data: {
-//         form: new Form({
-//             name: "",
-//             description: "",
-//         }),
-//     },
-
-//     methods: {
-//         onSubmit() {
-//             this.form.submit("post", "/projects");
-//         },
-//     },
-// });

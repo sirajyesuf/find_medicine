@@ -4,24 +4,34 @@
     >
         <div class="max-w-md w-full space-y-8">
             <Logo title="Sign up to get account" />
-            <form class="mt-8 space-y-6" @submit.prevent="register">
+            <form
+                class="mt-8 space-y-6"
+                @submit.prevent="register"
+            >
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
-                        <Error error="" />
                         <BaseInput
                             type="tel"
                             placeholder="Phone Number"
                             v-model="form.phonenumber"
+                            @keydown="form.errors.clear('phonenumber')"
+                        />
+                        <Error
+                            :error="form.errors.get('phonenumber')"
+                            v-if="form.errors.has('phonenumber')"
                         />
                     </div>
 
                     <div>
-                        <Error error="" />
                         <BaseInput
                             v-model="form.password"
                             type="password"
                             placeholder="password"
-                            @change="validatePassword"
+                            @keydown="form.errors.clear('password')"
+                        />
+                        <Error
+                            :error="form.errors.get('password')"
+                            v-if="form.errors.has('password')"
                         />
                     </div>
                 </div>
@@ -34,9 +44,11 @@
                 </div>
 
                 <div>
-                    <BaseButton type="submit" content="Sign up" />
-                    {{form.phonenumber}}
-                    {{form.password}}
+                    <BaseButton
+                        type="submit"
+                        content="Sign up"
+                        :disabled="form.errors.any()"
+                    />
                 </div>
             </form>
         </div>
@@ -50,8 +62,6 @@ import BaseButton from "../../components/form/BaseButton.vue";
 import BaseLink from "../../components/form/BaseLink.vue";
 import Error from "../../components/form/Error.vue";
 import Form from "../../form.js";
-import authservice from "../../services/authservice.js";
-
 export default {
     data() {
         return {
@@ -64,10 +74,14 @@ export default {
     watch: {},
     methods: {
         register() {
-            let payload = this.form.data();
-            payload['password_confirmation'] = payload['password']
-            console.log(payload)
-            authservice.register(payload);
+            this.form
+                .submit()
+                .then((res) => {
+                    this.$router.push({ name: "dashboard" });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
     components: {
