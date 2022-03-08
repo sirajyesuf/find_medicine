@@ -35,6 +35,8 @@
 
                 <div>
                     <BaseButton type="submit" content="Sign up" />
+                    {{form.phonenumber}}
+                    {{form.password}}
                 </div>
             </form>
         </div>
@@ -62,8 +64,10 @@ export default {
     watch: {},
     methods: {
         register() {
-            authservice.register(this.form.data);
-            // this.form.submit("post", "/projects");
+            let payload = this.form.data();
+            payload['password_confirmation'] = payload['password']
+            console.log(payload)
+            authservice.register(payload);
         },
     },
     components: {

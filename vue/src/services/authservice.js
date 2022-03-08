@@ -2,7 +2,7 @@ import client from "../axios.js";
 
 async function register(payload) {
     await get_csrf_cookie();
-    return client.post("/account/register");
+    return client.post("/account/register",payload);
 }
 async function login(payload) {
     return client.post(payload);

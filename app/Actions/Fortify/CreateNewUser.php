@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use App\Actions\AttachRoleToUser;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -21,19 +22,22 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input)
     {
         Validator::make($input, [
-            'phone_number' => [
+            'phonenumber' => [
                 'required',
-                'digit:10',
-                Rule::unique('users')->where(function ($query) {
-                    return $query->roles()->where('short_name', 'pharmacy_owner');
-                }),
+                'digits:10',
+                'unique:users'
             ],
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
-            'phone_number' => $input['phone_number'],
+        $user =  User::create([
+            'phonenumber' => $input['phonenumber'],
             'password' => Hash::make($input['password']),
         ]);
+
+        (new AttachRoleToUser())->handle($user, 'customer');
+
+        return $user;
+        
     }
 }
