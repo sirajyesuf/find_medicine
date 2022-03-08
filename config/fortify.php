@@ -61,7 +61,7 @@ return [
     |
     */
 
-    'home' => env('SPA_URL').'/dashboard',
+    'home' => env('SPA_URL') . '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => 'account',
 
     'domain' => null,
 
