@@ -11,15 +11,25 @@
                         <BaseInput
                             type="tel"
                             placeholder="Phone Number"
-                            v-model="credential.phonenumber"
+                            v-model="form.phonenumber"
+                            @keydown="form.errors.clear('phonenumber')"
+                        />
+                        <Error
+                            :error="form.errors.get('phonenumber')"
+                            v-if="form.errors.has('phonenumber')"
                         />
                     </div>
 
                     <div>
                         <BaseInput
-                            v-model="credential.password"
+                            v-model="form.password"
                             type="password"
                             placeholder="password"
+                            @keydown="form.errors.clear('password')"
+                        />
+                        <Error
+                            :error="form.errors.get('password')"
+                            v-if="form.errors.has('password')"
                         />
                     </div>
                 </div>
@@ -59,24 +69,29 @@ import Logo from "../../components/Logo.vue";
 import BaseInput from "../../components/form/BaseInput.vue";
 import BaseButton from "../../components/form/BaseButton.vue";
 import BaseLink from "../../components/form/BaseLink.vue";
+import Error from "../../components/form/Error.vue";
+import Form from "../../form.js";
+import authservice from "../../services/authservice";
+
 export default {
     data() {
         return {
-            credential: {
-                password: null,
+            form: new Form({
                 phonenumber: null,
-            },
-            error: null,
+                password: null,
+            }),
         };
     },
     methods: {
         async login() {
-            // this.error = null;
-            // await this.$store.dispatch("auth/login", this.credential);
-            // const authuser = await this.$store.dispatch("auth/getAuthUser");
-            // if (authuser) {
-            //     this.$router.push({ name: "dashboard" });
-            // }
+            this.form
+                .submit(authservice.login)
+                .then((res) => {
+                    this.$router.push({ name: "dashboard" });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
     components: {
@@ -84,6 +99,7 @@ export default {
         BaseInput,
         BaseButton,
         BaseLink,
+        Error,
     },
 };
 </script>

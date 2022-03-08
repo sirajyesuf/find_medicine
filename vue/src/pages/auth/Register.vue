@@ -4,14 +4,12 @@
     >
         <div class="max-w-md w-full space-y-8">
             <Logo title="Sign up to get account" />
-            <form
-                class="mt-8 space-y-6"
-                @submit.prevent="register"
-            >
+            <form class="mt-8 space-y-6" @submit.prevent="register">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
                         <BaseInput
                             type="tel"
+                            name="phonenumber"
                             placeholder="Phone Number"
                             v-model="form.phonenumber"
                             @keydown="form.errors.clear('phonenumber')"
@@ -24,6 +22,7 @@
 
                     <div>
                         <BaseInput
+                            name="password"
                             v-model="form.password"
                             type="password"
                             placeholder="password"
@@ -62,6 +61,9 @@ import BaseButton from "../../components/form/BaseButton.vue";
 import BaseLink from "../../components/form/BaseLink.vue";
 import Error from "../../components/form/Error.vue";
 import Form from "../../form.js";
+import validators from "../../validators.js";
+import authservice from "../../services/authservice";
+
 export default {
     data() {
         return {
@@ -69,19 +71,49 @@ export default {
                 phonenumber: null,
                 password: null,
             }),
+            er: {
+                phonenumber: [],
+                password: [],
+            },
         };
     },
     watch: {},
     methods: {
         register() {
             this.form
-                .submit()
+                .submit(authservice.register)
                 .then((res) => {
                     this.$router.push({ name: "dashboard" });
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+        },
+        validate(ev) {
+            if (ev.target.name === "password") {
+                let res = validators.password(this.form.password);
+                console.log(res);
+                if (res !== true) {
+                    this.er.password.push(res);
+                }
+                if (res == true) {
+                    this.form.errors.clear("password");
+                }
+            }
+            if (ev.target.name === "phonenumber") {
+                let res = validators.phonenumber(this.form.phonenumber);
+                console.log(res);
+
+                if (res !== true) {
+                    this.er.phonenumber.push(res);
+                }
+                if (res == true) {
+                    this.form.errors.clear("phonenumber");
+                }
+            }
+            if (this.er.password.length > 0 || this.er.phonenumber.length > 0) {
+                this.form.errors.record(this.er);
+            }
         },
     },
     components: {

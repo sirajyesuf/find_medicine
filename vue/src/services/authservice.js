@@ -5,7 +5,8 @@ async function register(payload) {
     return client.post("/account/register", payload);
 }
 async function login(payload) {
-    return client.post(payload);
+    await get_csrf_cookie();
+    return client.post("/account/login", payload);
 }
 function logout() {
     return client.post("account/logout");

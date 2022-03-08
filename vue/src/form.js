@@ -1,4 +1,3 @@
-import authservice from "./services/authservice";
 class Errors {
     constructor() {
         this.errors = {};
@@ -23,11 +22,15 @@ class Errors {
     }
 
     clear(field) {
+        console.log("clear", this.errors[field]);
         if (field) {
             delete this.errors[field];
 
             return;
         }
+    }
+    add(field, error) {
+        this.errors[field] = error;
     }
 }
 
@@ -57,9 +60,8 @@ class Form {
         }
     }
 
-    async submit() {
-        return authservice
-            .register(this.data())
+    async submit(func) {
+        return func(this.data())
             .then(await this.onSuccess.bind(this))
             .catch(await this.onFail.bind(this));
     }
