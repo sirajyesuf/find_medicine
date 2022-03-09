@@ -9,14 +9,14 @@
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
                         <BaseInput
-                            type="tel"
-                            placeholder="Phone Number"
-                            v-model="form.phonenumber"
-                            @keydown="form.errors.clear('phonenumber')"
+                            type="email"
+                            placeholder="Email"
+                            v-model="form.email"
+                            @keydown="form.errors.clear('email')"
                         />
                         <Error
-                            :error="form.errors.get('phonenumber')"
-                            v-if="form.errors.has('phonenumber')"
+                            :error="form.errors.get('email')"
+                            v-if="form.errors.has('email')"
                         />
                     </div>
 
@@ -77,7 +77,7 @@ export default {
     data() {
         return {
             form: new Form({
-                phonenumber: null,
+                email: null,
                 password: null,
             }),
         };

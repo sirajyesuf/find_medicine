@@ -12,6 +12,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
     {
         path: "/",
+        name: "landing",
         component: Landing,
     },
     {
@@ -33,12 +34,12 @@ const routes = [
                 component: Register,
             },
             {
-                path: "forgotpassword",
+                path: "forgot-password",
                 name: "forgotpassword",
                 component: ForgotPassword,
             },
             {
-                path: "resetpassword",
+                path: "reset-password",
                 name: "resetpassword",
                 component: ResetPassword,
             },

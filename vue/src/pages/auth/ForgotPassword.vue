@@ -4,29 +4,32 @@
     >
         <div class="max-w-md w-full space-y-8">
             <div>
-                <img
-                    class="mx-auto h-12 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                    alt="Workflow"
-                />
+                <Logo />
                 <h2
                     class="mt-6 text-center text-3xl font-extrabold text-gray-900"
                 >
                     Forgot your password
                 </h2>
-                <p class="mt-2 text-center text-sm text-gray-600"></p>
+                <p
+                    class="mt-2 text-center text-xl text-green-600"
+                    v-text="form.message.get()"
+                ></p>
             </div>
-            <form class="mt-8 space-y-6" action="#" method="POST">
+            <form class="mt-8 space-y-6" @submit.prevent="forgotPassword">
                 <input type="hidden" name="remember" value="true" />
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
                         <BaseInput
-                            type="tel"
-                            placeholder="Phone Number"
-                            v-model="creadential.phonenumber"
+                            type="email"
+                            placeholder="Email"
+                            v-model="form.email"
+                            @keydown="form.errors.clear('email')"
+                        />
+                        <Error
+                            :error="form.errors.get('email')"
+                            v-if="form.errors.has('email')"
                         />
                     </div>
-                    {{ creadential.phonenumber }}
                 </div>
 
                 <div class="flex items-center justify-end">
@@ -50,20 +53,31 @@
 </template>
 
 <script>
+import Logo from "../../components/Logo.vue";
 import BaseInput from "../../components/form/BaseInput.vue";
 import BaseLink from "../../components/form/BaseLink.vue";
+import Form from "../../form.js";
+import authservice from "../../services/authservice.js";
+import Error from "../../components/form/Error.vue";
+
 export default {
     data() {
         return {
-            creadential: {
-                password: null,
-                phonenumber: null,
-            },
+            form: new Form({
+                email: null,
+            }),
         };
+    },
+    methods: {
+        async forgotPassword() {
+            this.form.submit(authservice.forgotPassword);
+        },
     },
     components: {
         BaseInput,
-        BaseLink
+        BaseLink,
+        Error,
+        Logo,
     },
 };
 </script>

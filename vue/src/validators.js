@@ -9,14 +9,14 @@ function password(value) {
     return true;
 }
 
-function phonenumber(value) {
+function name(value) {
     if (!value) {
-        return "the phonenumber field is required";
+        return "the name field is required";
     }
-    if (value.length < 10 || value.length > 10) {
-        return "The phonenumber must be 10 digits.";
+    if (value.length <= 255) {
+        return "The name must be at most 255  characters.";
     }
 
     return true;
 }
-export default { password, phonenumber };
+export default { password, name };

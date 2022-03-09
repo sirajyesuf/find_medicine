@@ -9,14 +9,28 @@
                     <div>
                         <BaseInput
                             type="tel"
-                            name="phonenumber"
-                            placeholder="Phone Number"
-                            v-model="form.phonenumber"
-                            @keydown="form.errors.clear('phonenumber')"
+                            name="name"
+                            placeholder="Name"
+                            v-model="form.name"
+                            @keydown="form.errors.clear('name')"
                         />
                         <Error
-                            :error="form.errors.get('phonenumber')"
-                            v-if="form.errors.has('phonenumber')"
+                            :error="form.errors.get('name')"
+                            v-if="form.errors.has('name')"
+                        />
+                    </div>
+
+                    <div>
+                        <BaseInput
+                            name="email"
+                            v-model="form.email"
+                            type="email"
+                            placeholder="Email"
+                            @keydown="form.errors.clear('email')"
+                        />
+                        <Error
+                            :error="form.errors.get('email')"
+                            v-if="form.errors.has('email')"
                         />
                     </div>
 
@@ -68,11 +82,13 @@ export default {
     data() {
         return {
             form: new Form({
-                phonenumber: null,
+                name: null,
+                email: null,
                 password: null,
             }),
             er: {
-                phonenumber: [],
+                name: [],
+                email: [],
                 password: [],
             },
         };
@@ -100,18 +116,18 @@ export default {
                     this.form.errors.clear("password");
                 }
             }
-            if (ev.target.name === "phonenumber") {
-                let res = validators.phonenumber(this.form.phonenumber);
+            if (ev.target.name === "name") {
+                let res = validators.name(this.form.name);
                 console.log(res);
 
                 if (res !== true) {
-                    this.er.phonenumber.push(res);
+                    this.er.name.push(res);
                 }
                 if (res == true) {
-                    this.form.errors.clear("phonenumber");
+                    this.form.errors.clear("name");
                 }
             }
-            if (this.er.password.length > 0 || this.er.phonenumber.length > 0) {
+            if (this.er.password.length > 0 || this.er.name.length > 0) {
                 this.form.errors.record(this.er);
             }
         },

@@ -4,11 +4,7 @@
     >
         <div class="max-w-md w-full space-y-8">
             <div>
-                <img
-                    class="mx-auto h-12 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                    alt="Workflow"
-                />
+                <Logo />
                 <h2
                     class="mt-6 text-center text-3xl font-extrabold text-gray-900"
                 >
@@ -16,19 +12,26 @@
                 </h2>
                 <p class="mt-2 text-center text-sm text-gray-600"></p>
             </div>
-            <form class="mt-8 space-y-6" action="#" method="POST">
-                <input type="hidden" name="remember" value="true" />
+            <form class="mt-8 space-y-6" @submit.prevent="passwordReset">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div>
+                        <Error
+                            :error="form.errors.get('email')"
+                            v-if="form.errors.has('email')"
+                        />
                         <BaseInput
-                            v-model="creadential.password"
+                            v-model="form.password"
                             type="password"
                             placeholder="password"
+                            @keydown="form.errors.clear('password')"
+                        />
+                        <Error
+                            :error="form.errors.get('password')"
+                            v-if="form.errors.has('password')"
                         />
                     </div>
-                    {{ creadential.phonenumber }}
                 </div>
-
+                {{ form.errors }}
                 <div>
                     <BaseButton type="submit" content="Update" />
                 </div>
@@ -38,20 +41,47 @@
 </template>
 
 <script>
+import Logo from "../../components/Logo.vue";
+
 import BaseInput from "../../components/form/BaseInput.vue";
-import BaseButton from "../../components/form/BaseButton.vue"
+import BaseButton from "../../components/form/BaseButton.vue";
+import Form from "../../form.js";
+import Error from "../../components/form/Error.vue";
+import authservice from "../../services/authservice";
+
 export default {
     data() {
         return {
-            creadential: {
+            form: new Form({
                 password: null,
-                phonenumber: null,
-            },
+                email: "email",
+                token: null,
+            }),
         };
+    },
+    beforeRouteEnter(to, from, next) {
+        next((vm) => {
+            if (vm.$route.query.email && vm.$route.query.token) {
+                next();
+            } else {
+                vm.$router.push({ name: "landing" });
+            }
+        });
+    },
+    methods: {
+        async passwordReset() {
+            this.form.submit(authservice.passwordReset);
+        },
+    },
+    created() {
+        this.form.email = this.$route.query.email;
+        this.form.token = this.$route.query.token;
     },
     components: {
         BaseInput,
-        BaseButton
+        BaseButton,
+        Error,
+        Logo,
     },
 };
 </script>

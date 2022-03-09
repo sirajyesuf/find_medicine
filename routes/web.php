@@ -20,3 +20,4 @@ Route::get('/', function () {
 route::get('/y', function () {
     return "web";
 });
+

@@ -22,7 +22,6 @@ class Errors {
     }
 
     clear(field) {
-        console.log("clear", this.errors[field]);
         if (field) {
             delete this.errors[field];
 
@@ -31,6 +30,21 @@ class Errors {
     }
     add(field, error) {
         this.errors[field] = error;
+    }
+}
+
+class Message {
+    constructor() {
+        this.message = {};
+    }
+    record(message) {
+        this.message = message;
+    }
+    get() {
+        return this.message.message;
+    }
+    clear() {
+        delete this.message;
     }
 }
 
@@ -43,6 +57,7 @@ class Form {
         }
 
         this.errors = new Errors();
+        this.message = new Message();
     }
 
     data() {
@@ -69,6 +84,7 @@ class Form {
     async onSuccess(response) {
         this.errors.clear();
         this.reset();
+        this.message.record(response.data);
         return Promise.resolve(response);
     }
 

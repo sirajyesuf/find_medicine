@@ -8,6 +8,14 @@ async function login(payload) {
     await get_csrf_cookie();
     return client.post("/account/login", payload);
 }
+async function forgotPassword(payload) {
+    await get_csrf_cookie();
+    return client.post("/account/forgot-password", payload);
+}
+async function passwordReset(payload) {
+    await get_csrf_cookie();
+    return client.post("/account/reset-password", payload);
+}
 function logout() {
     return client.post("account/logout");
 }
@@ -21,6 +29,8 @@ async function get_csrf_cookie() {
 export default {
     register,
     login,
+    forgotPassword,
+    passwordReset,
     getAuthUser,
     logout,
 };
